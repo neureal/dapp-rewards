@@ -1,0 +1,66 @@
+<html>
+  <head>
+    <title>Reward</title>
+    <link rel="stylesheet" type="text/css" href="static/css/app.css">
+    <script src="static/js/app.js"></script>
+  </head>
+  <body>
+
+    <div id="div_deployContract" class="w3-panel w3-hide">
+      <h3 class="w3-padding-small w3-leftbar w3-lime">Deploy new contract</h3>
+      <button id="button_deploy" class="w3-button w3-sand w3-hover-khaki">Deploy</button>
+    </div>
+
+    <span id="span_admin" class="w3-hide">
+      <div id="div_info" class="w3-panel">
+        <h3 class="w3-padding-small w3-leftbar w3-lime">Contract info</h3>
+        <p>Contract Address: <b id="text_address"></b></p>
+      </div>
+      
+      <div id="div_mint" class="w3-panel">
+        <h3 id="hdr" class="w3-button w3-block w3-left-align w3-padding-small w3-leftbar w3-lime w3-hover-khaki">Mint NFT</h3>
+        <span id="span_content" class="w3-hide">
+          <label class="w3-text-grey">Send to ETH Address</label>
+          <input id="input_address" class="w3-input w3-border" type="text"  placeholder="0x0000000000000000000000000000000000000000" required /><br>
+          <label class="w3-text-grey">Image</label>
+          <input id="input_image_url" class="w3-input w3-border" type="file" accept="image/png, image/jpeg" /><br>
+          <label class="w3-text-grey">Name</label>
+          <input id="input_name" class="w3-input w3-border" type="text" placeholder="Jane Doe" required /><br>
+          <label class="w3-text-grey">Description</label>
+          <input id="input_description" class="w3-input w3-border" type="text" placeholder="Thank you for your generous contribution!" /><br>
+          <label class="w3-text-grey">Background Color</label>
+          <input id="input_background_color" class="w3-input w3-border" type="text" placeholder="FFFFFF" /><br>
+          <label class="w3-text-grey">Attributes</label>
+          <textarea id="input_traits" class="w3-input w3-border" rows="4"></textarea><br>
+          <button id="button_execute" class="w3-button w3-sand w3-hover-khaki">Mint</button>
+        </span>
+      </div>
+
+      <div id="div_list_id" class="w3-panel">
+        <h3 id="hdr" class="w3-button w3-block w3-left-align w3-padding-small w3-leftbar w3-lime w3-hover-khaki">Get an NFT by ID</h3>
+        <span id="span_content" class="w3-hide">
+          <label class="w3-text-grey">NFT ID</label>
+          <input id="input_id" class="w3-input w3-border" type="text" placeholder="(uint256, 32 bytes)" required /><br>
+          <button id="button_query" class="w3-button w3-sand w3-hover-khaki">Query</button>
+        </span>
+      </div>
+
+      <div id="div_list_owner" class="w3-panel">
+        <h3 id="hdr" class="w3-button w3-block w3-left-align w3-padding-small w3-leftbar w3-lime w3-hover-khaki">List NFTs owned by address</h3>
+        <span id="span_content" class="w3-hide">
+          <label class="w3-text-grey">ETH Address</label>
+          <input id="input_address" class="w3-input w3-border" type="text" placeholder="0x0000000000000000000000000000000000000000" required /><br>
+          <button id="button_list" class="w3-button w3-sand w3-hover-khaki">List</button>
+        </span>
+      </div>
+
+      <div id="div_list" class="w3-panel">
+        <h3 id="hdr" class="w3-button w3-block w3-left-align w3-padding-small w3-leftbar w3-lime w3-hover-khaki">List all minted NFTs</h3>
+        <span id="span_content" class="w3-hide">
+          <button id="button_list" class="w3-button w3-sand w3-hover-khaki">List</button>
+        </span>
+      </div>
+    </span>
+      
+  </body>
+</html>

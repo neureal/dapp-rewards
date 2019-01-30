@@ -1,0 +1,16 @@
+{
+  "name": "dapp-rewards",
+  "version": "0.0.1",
+  "description": "Serverless brandable dapp for minting ERC721 NFT rewards",
+  "scripts": {
+    "test": "embark test"
+  },
+  "author": "Wil Bown <wilbown@gmail.com>",
+  "license": "MIT",
+  "homepage": "",
+  "dependencies": {
+    "openzeppelin-solidity": "2.0.0",
+    "jquery": "3.3.1"
+  },
+  "devDependencies": {}
+}

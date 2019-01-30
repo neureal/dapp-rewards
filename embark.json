@@ -1,0 +1,27 @@
+{
+  "contracts": ["contracts/**"],
+  "app": {
+    "static/css/app.css": ["app/css/**"],
+    "static/js/app.js": ["app/js/index.js"],
+    "static/images/": ["app/images/**"],
+    "index.html": "app/index.html",
+    "robots.txt": "app/robots.txt"
+  },
+  "buildDir": "dist/",
+  "config": {
+    "blockchain": "config/blockchain.js",
+    "communication": false,
+    "contracts": "config/contracts.js",
+    "namesystem": false,
+    "storage": "config/storage.js",
+    "webserver": "config/webserver.js"
+  },
+  "plugins": {
+  },
+  "options": {
+    "solc": {
+      "optimize": true,
+      "optimize-runs": 200
+    }
+  }
+}
