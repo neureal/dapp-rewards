@@ -10,15 +10,19 @@
         <p id="text_description"></p>
     </div>
 
-    <div id="div_deployContract" class="w3-panel w3-hide">
+    <div id="div_deploy" class="w3-panel w3-hide">
       <h3 class="w3-padding-small w3-leftbar w3-lime">Deploy a New Contract</h3>
+      <label class="w3-text-grey">Name</label>
+      <input id="input_name" class="w3-input w3-border" type="text" placeholder="XYZ Rewards" required /><br>
+      <label class="w3-text-grey">Symbol</label>
+      <input id="input_symbol" class="w3-input w3-border" type="text" placeholder="XYZR" /><br>
       <button id="button_deploy" class="w3-button w3-sand w3-hover-khaki">Deploy</button>
     </div>
 
     <span id="span_admin" class="w3-hide">
       <div id="div_info" class="w3-panel">
-        <h3 class="w3-padding-small w3-leftbar w3-lime">Contract Information</h3>
-        <p>Contract Address: <b id="text_address"></b></p>
+        <h3 class="w3-padding-small w3-leftbar w3-lime"><b id="text_name"></b> (<b id="text_symbol"></b>) Contract Information</h3>
+        <p>Address: <b id="text_address"></b></p>
       </div>
       
       <div id="div_mint" class="w3-panel">

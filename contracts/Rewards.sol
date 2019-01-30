@@ -17,7 +17,7 @@ contract Rewards is ERC721Full, ERC721MetadataMintable {
     /*** Events ***/
 
     /* Initializes contract */
-    constructor() ERC721Full("Rewards", "NFT") public { }
+    constructor(string name, string symbol) ERC721Full(name, symbol) public { }
 
     function mintWithTokenURI(address to, string tokenURI) external {
         require(mintWithTokenURI(to, tokenId, tokenURI), "");

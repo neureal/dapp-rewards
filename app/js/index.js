@@ -52,11 +52,15 @@ window.addEventListener('load', async () => {
             web3: web3
           });
         } else {
-          $('#div_deployContract').removeClass('w3-hide');
           // Deploy new contract
-          $('#div_deployContract #button_deploy').click(async function () {
-            curContract = await Rewards.deploy({ data: Rewards.options.data }).send({ gas: 6000000 });
-            window.location.search = 'contract=' + encodeURI(curContract.options.address);
+          $('#div_deploy').removeClass('w3-hide');
+          $('#div_deploy #button_deploy').click(async function () {
+            try {
+              const inputname = $('#div_deploy #input_name').val(); if (inputname.length > 32) throw new Error('Contract name too long.');
+              const inputsymbol = $('#div_deploy #input_symbol').val(); if (inputsymbol.length > 8) throw new Error('Contract symbol too long.');
+              curContract = await Rewards.deploy({ arguments: [inputname, inputsymbol], data: Rewards.options.data }).send({ gas: 6000000 });
+              window.location.search = 'contract=' + encodeURI(curContract.options.address);
+            } catch (err) { error(err); }
           });
           return;
         }
@@ -66,6 +70,10 @@ window.addEventListener('load', async () => {
         $('#div_list #hdr').click(async function () { $('#div_list #span_content').toggleClass('w3-hide'); });
 
         // Contract Info
+        const name = await curContract.methods.name().call();
+        $('#div_info #text_name').text(name);
+        const symbol = await curContract.methods.symbol().call();
+        $('#div_info #text_symbol').text(symbol);
         $('#div_info #text_address').text(curContract.options.address);
         const accounts = await web3.eth.getAccounts();
         if (accounts.length < 1) throw new Error('No accounts available.');
@@ -73,7 +81,7 @@ window.addEventListener('load', async () => {
         for (var i = 0; i < 3 && i < accounts.length; i++) {
           const minter = await curContract.methods.isMinter(accounts[i]).call();
           const balance = await web3.eth.getBalance(accounts[i]);
-          const item = `<p>Account[${i}]: ${accounts[i]}<br>${minter} | ${web3.utils.fromWei(balance)}</p>`;
+          const item = `<p>Account[${i}]: ${accounts[i]}<br>owner? ${minter} | ${web3.utils.fromWei(balance)} ETH</p>`;
           divInfo.append(item);
         }
 

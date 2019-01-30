@@ -32,6 +32,9 @@ module.exports = {
       'http://localhost:8545',
       '$WEB3' // uses pre existing web3 object if available (e.g in Mist)
     ],
+    contracts: {
+      'Rewards': { args: [ 'XYZ Rewards', 'XYZR' ] }
+    },
     deployment: {
       host: 'localhost', // Host of the blockchain node
       port: 8545, // Port of the blockchain node
