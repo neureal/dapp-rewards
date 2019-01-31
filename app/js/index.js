@@ -22,6 +22,7 @@ async function pinIpfs (gateway, hash) {
   return (hashRsp) ? hashRsp[0] === hash : false;
 }
 
+// TODO add progress bars
 window.addEventListener('load', async () => {
   try {
     if (!window.ethereum && !window.web3) throw new Error('Non-Ethereum browser detected.');
