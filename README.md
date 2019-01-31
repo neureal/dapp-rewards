@@ -9,7 +9,7 @@ Compatible with OpenSea https://opensea.io/
 
 Example
 
-https://cloudflare-ipfs.com/ipfs/QmcJLSEYXJuJFrKahYTXnmJbXartdxDAmRWZmCrqvcp25i/?contract=0x101b37738Ddf06d53A65d09d112731900eE46E74
+https://cloudflare-ipfs.com/ipfs/QmcMuQQqhL92p8YajC2NDEmcrApVJaCtsYWqnbmaVxistE/?contract=0x50110689F821af743f855D6D03408a1C1d9db590
 
 ## Development Requirements
 
