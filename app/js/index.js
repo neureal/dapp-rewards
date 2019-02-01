@@ -153,9 +153,8 @@ window.addEventListener('load', async () => {
               const item = `<p id="d">NFT | <a href="${uri}" target="_blank">MetaData</a> | <a href="${OpenSeaLink}/${curContract.options.address}/${id}" target="_blank">OpenSea</a> | ID[${id}] Owner[${owner}]</p>`;
               $('#div_list #span_content').append(item);
             }
-          } catch (err) { $('#div_error').removeClass('w3-hide'); $('#div_error #text_description').text(err); }
+          } catch (err) { error(err); }
         });
-
         $('#span_admin').removeClass('w3-hide');
       } catch (err) { error(err); }
     });
