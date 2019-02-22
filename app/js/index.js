@@ -22,7 +22,6 @@ async function pinIpfs (gateway, hash) {
   return (hashRsp) ? hashRsp[0] === hash : false;
 }
 
-// TODO add progress bars
 window.addEventListener('load', async () => {
   try {
     if (!window.ethereum && !window.web3) throw new Error('Non-Ethereum browser detected.');
@@ -57,11 +56,14 @@ window.addEventListener('load', async () => {
           $('#div_deploy').removeClass('w3-hide');
           $('#div_deploy #button_deploy').click(async function () {
             try {
+              $('#div_error').addClass('w3-hide');
+              $('#modal_progress').addClass('w3-show');
               const inputname = $('#div_deploy #input_name').val(); if (inputname.length > 32) throw new Error('Contract name too long.');
               const inputsymbol = $('#div_deploy #input_symbol').val(); if (inputsymbol.length > 8) throw new Error('Contract symbol too long.');
-              curContract = await Rewards.deploy({ arguments: [inputname, inputsymbol], data: Rewards.options.data }).send({ gas: 6000000 });
+              curContract = await Rewards.deploy({ arguments: [inputname, inputsymbol], data: Rewards.options.data }).send();
               window.location.search = 'contract=' + encodeURI(curContract.options.address);
             } catch (err) { error(err); }
+            $('#modal_progress').removeClass('w3-show');
           });
           return;
         }
@@ -89,6 +91,8 @@ window.addEventListener('load', async () => {
         // Mint NFT
         $('#div_mint #button_execute').click(async function () {
           try {
+            $('#div_error').addClass('w3-hide');
+            $('#modal_progress').addClass('w3-show');
             $('#div_mint #span_content #d').remove();
             const owner = $('#div_mint #input_address').val();
             if (!web3.utils.isAddress(owner)) throw new Error('Address is not a correctly formated Ethereum address.');
@@ -105,19 +109,21 @@ window.addEventListener('load', async () => {
             const inputtraits = JSON.parse('[' + $('#div_mint #input_traits').val() + ']'); if (inputtraits.length > 0) json['traits'] = inputtraits;
             const hash = await EmbarkJS.Storage.saveText(JSON.stringify(json));
             await pinIpfs(ipfsApiGateway, hash); await pinIpfs(ipfsApiGtwyBkup, hash);
-            const uri = ipfsLiveGateway + '/ipfs/' + hash; // 'fs:/ipfs/','/ipfs/','ipfs/' didn't work on OpenSea
-            const receipt = await curContract.methods.mintWithTokenURI(owner, uri).send({ gas: 4000000 });
+            const uri = ipfsLiveGateway + '/ipfs/' + hash;
+            const receipt = await curContract.methods.mintWithTokenURI(owner, uri).send();
             const id = receipt.events['Transfer'].returnValues.tokenId;
             const item = `<p id="d">NFT | <a href="${uri}" target="_blank">MetaData</a> | <a href="${OpenSeaLink}/${curContract.options.address}/${id}" target="_blank">OpenSea</a> | ID[${id}]</p>`;
             $('#div_mint #span_content').append(item);
           } catch (err) { error(err); }
+          $('#modal_progress').removeClass('w3-show');
         });
 
         // Get an NFT by ID
         $('#div_list_id #button_query').click(async function () {
           try {
+            $('#div_error').addClass('w3-hide');
             $('#div_list_id #span_content #d').remove();
-            const id = web3.utils.toBN($('#div_list_id #input_id').val());
+            const id = web3.utils.toBN($('#div_list_id #input_id').val()).toString();
             const owner = await curContract.methods.ownerOf(id).call();
             const uri = await curContract.methods.tokenURI(id).call();
             const item = `<p id="d">NFT | <a href="${uri}" target="_blank">MetaData</a> | <a href="${OpenSeaLink}/${curContract.options.address}/${id}" target="_blank">OpenSea</a> | ID[${id}] Owner[${owner}]</p>`;
@@ -128,6 +134,7 @@ window.addEventListener('load', async () => {
         // List NFTs owned by address
         $('#div_list_owner #button_list').click(async function () {
           try {
+            $('#div_error').addClass('w3-hide');
             $('#div_list_owner #span_content #d').remove();
             const owner = $('#div_list_owner #input_address').val();
             if (!web3.utils.isAddress(owner)) throw new Error('Address is not a correctly formated Ethereum address.');
@@ -144,6 +151,7 @@ window.addEventListener('load', async () => {
         // List all minted NFTs
         $('#div_list #button_list').click(async function () {
           try {
+            $('#div_error').addClass('w3-hide');
             $('#div_list #span_content #d').remove();
             const count = await curContract.methods.totalSupply().call();
             for (var i = 0; i < count; i++) {

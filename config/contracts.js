@@ -1,6 +1,8 @@
 module.exports = {
   // default applies to all environments
   default: {
+    // Automatically call `ethereum.enable` if true.
+    dappAutoEnable: false,
     // order of connections the dapp should connect to
     dappConnection: [
       '$WEB3' // uses pre existing web3 object if available (e.g in Mist)
@@ -20,7 +22,7 @@ module.exports = {
     },
     versions: {
       'web3': '1.0.0-beta',
-      'solc': '0.4.25'
+      'solc': '0.5.0'
     }
   },
 
@@ -37,8 +39,8 @@ module.exports = {
     },
     deployment: {
       host: 'localhost', // Host of the blockchain node
-      port: 8545, // Port of the blockchain node
-      type: 'rpc' // Type of connection (ws or rpc)
+      port: 8546, // Port of the blockchain node
+      type: 'ws' // Type of connection (ws or rpc)
     }
   },
 

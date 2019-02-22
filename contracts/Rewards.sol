@@ -1,4 +1,4 @@
-pragma solidity 0.4.25;
+pragma solidity 0.5.0;
 
 import "openzeppelin-solidity/contracts/token/ERC721/ERC721Full.sol";
 import "openzeppelin-solidity/contracts/token/ERC721/ERC721MetadataMintable.sol";
@@ -17,9 +17,9 @@ contract Rewards is ERC721Full, ERC721MetadataMintable {
     /*** Events ***/
 
     /* Initializes contract */
-    constructor(string name, string symbol) ERC721Full(name, symbol) public { }
+    constructor(string memory name, string memory symbol) ERC721Full(name, symbol) public { }
 
-    function mintWithTokenURI(address to, string tokenURI) external {
+    function mintWithTokenURI(address to, string calldata tokenURI) external {
         require(mintWithTokenURI(to, tokenId, tokenURI), "");
         tokenId = tokenId.add(1);
     }

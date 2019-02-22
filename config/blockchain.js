@@ -7,6 +7,7 @@ module.exports = {
   // default environment, merges with the settings in default
   // assumed to be the intended environment by `embark run` and `embark blockchain`
   development: {
+    ethereumClientName: 'geth', // Can be geth or parity (default:geth)
     networkType: 'custom', // Can be: testnet, rinkeby, livenet or custom, in which case, it will use the specified networkId
     networkId: '1337', // Network id used when networkType is custom
     rpcHost: 'localhost', // HTTP-RPC server listening interface (default: 'localhost')
@@ -17,19 +18,13 @@ module.exports = {
     wsHost: 'localhost', // WS-RPC server listening interface (default: 'localhost')
     wsPort: 8546, // WS-RPC server listening port (default: 8546)
     isDev: true, // Uses and ephemeral proof-of-authority network with a pre-funded developer account, mining enabled
-    datadir: '.embark/development/datadir', // Data directory for the databases and keystore
+    datadir: '.embark/development/datadir', // Data directory for the databases and keystore (Geth 1.8.15 and Parity 2.0.4 can use the same base folder, till now they does not conflict with each other)
     mineWhenNeeded: true, // Uses our custom script (if isDev is false) to mine only when needed
     nodiscover: true, // Disables the peer discovery mechanism (manual peer addition)
     maxpeers: 0, // Maximum number of network peers (network disabled if set to 0) (default: 25)
     proxy: true, // Proxy is used to present meaningful information about transactions
     targetGasLimit: 8000000, // Target gas limit sets the artificial target gas floor for the blocks to mine
-    simulatorMnemonic: 'example exile argue silk regular smile grass bomb merge arm assist farm', // Mnemonic  used by the simulator to generate a wallet // 0xB8D851486d1C953e31A44374ACa11151D49B8bb3
-    simulatorBlocktime: 0, // Specify blockTime in seconds for automatic mining. Default is 0 and no auto-mining.
-    account: {
-      numAccounts: 9, // When specified, creates accounts for use in the dapp. This option only works in the development environment, and can be used as a quick start option that bypasses the need for MetaMask in development. These accounts are unlocked and funded with the below settings.
-      // password: 'config/development/password', // Password for the created accounts (as specified in the `numAccounts` setting). If `mineWhenNeeded` is enabled (and isDev is not), this password is used to create a development account controlled by the node.
-      balance: '100 ether' // Balance to be given to the created accounts (as specified in the `numAccounts` setting)
-    }
+    simulatorBlocktime: 0 // Specify blockTime in seconds for automatic mining. Default is 0 and no auto-mining.
   },
 
   // merges with the settings in default
@@ -64,35 +59,32 @@ module.exports = {
     nodiscover: true,
     maxpeers: 0,
     proxy: true,
-    account: {
-      // 'address': '', // When specified, uses that address instead of the default one for the network
-      password: 'config/privatenet/password' // Password to unlock the account. If `mineWhenNeeded` is enabled (and isDev is not), this password is used to create a development account controlled by the node.
-    },
     targetGasLimit: 8000000,
-    simulatorMnemonic: 'example exile argue silk regular smile grass bomb merge arm assist farm',
-    simulatorBlocktime: 0
+    simulatorBlocktime: 0,
+    accounts: [
+      {
+        nodeAccounts: true,
+        password: 'config/privatenet/password' // Password to unlock the account
+      }
+    ]
   },
 
   // merges with the settings in default
   // used with 'embark run testnet' and/or 'embark blockchain testnet'
   testnet: {
-    networkType: 'rinkeby',
-    account: {
-      // address: '' // When specified, uses that address instead of the default one for the network
-    }
+    networkType: 'custom',
+    networkId: '4' // rinkeby
   },
 
   // merges with the settings in default
   // used with 'embark run livenet' and/or 'embark blockchain livenet'
   livenet: {
-    networkType: 'livenet',
-    account: {
-      // address: '' // When specified, uses that address instead of the default one for the network
-    }
+    networkType: 'custom',
+    networkId: '1' // mainnet
   }
 
-  // you can name an environment with specific settings and then specify with
-  // 'embark run custom_name' or 'embark blockchain custom_name'
+  // // you can name an environment with specific settings and then specify with
+  // // 'embark run custom_name' or 'embark blockchain custom_name'
   // custom_name: {
   // }
 };
