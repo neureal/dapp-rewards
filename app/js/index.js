@@ -1,9 +1,9 @@
-/* globals web3 fetch */
+/* globals web3 */
 import $ from 'jquery';
 import EmbarkJS from 'Embark/EmbarkJS';
 import Rewards from 'Embark/contracts/Rewards';
 
-const ipfsApiGateway = 'https://ipfs.infura.io:5001';
+const ipfsApiProvider = ipfsOptionsURL('https://ipfs.infura.io:5001');
 const ipfsLiveGateway = 'https://cloudflare-ipfs.com';
 
 const netInfo = { // TODO limit this to main network on deploy
@@ -14,19 +14,14 @@ const netInfo = { // TODO limit this to main network on deploy
   1337: { desc: 'Local Network', explorer: '', opensea: '' }
 };
 
+function ipfsOptionsURL (urltxt) {
+  const url = new URL(urltxt);
+  return { host: url.hostname, port: url.port, protocol: url.protocol.slice(0, -1), getUrl: `${url.protocol}//${url.hostname}/ipfs/` };
+}
+
 function error (err) {
   $('#div_error').removeClass('w3-hide');
   $('#div_error #text_description').text(err);
-}
-
-async function pinIpfs (gateway, hash) {
-  if (gateway === null) return;
-  const call = `${gateway}/api/v0/pin/add?arg=/ipfs/${hash}&recursive=true`;
-  const response = await fetch(call);
-  if (!response.ok) throw new Error('pinIpfs HTTP error, status = ' + response.status);
-  const json = await response.text();
-  const hashRsp = JSON.parse(json)['Pins'];
-  return (hashRsp) ? hashRsp[0] === hash : false;
 }
 
 window.addEventListener('load', async () => {
@@ -38,21 +33,28 @@ window.addEventListener('load', async () => {
       try {
         // ** Check blockchain
         if (err) throw new Error(err);
-        console.log('blockchain OK');
+        console.log('Blockchain OK');
         // ** Check storage
         const result = await EmbarkJS.Storage.isAvailable();
         if (!result) throw new Error('Storage not available.');
-        console.log('storage OK');
+        console.log('Storage OK');
 
         // ** Main
         var curContract = Rewards;
         const netid = await web3.eth.net.getId();
         if (netInfo[netid] === undefined) throw new Error(`Incompatable network for this dapp. Please choose ${netInfo[Object.keys(netInfo)[0]].desc}.`);
 
-        // Get current contract address
+        // Setup objects
         const urlParams = new URLSearchParams(window.location.search);
-        const ipfsApiGtwyBkupHost = urlParams.get('ipfs');
-        const ipfsApiGtwyBkup = (ipfsApiGtwyBkupHost === null) ? null : (new URL(`https://${ipfsApiGtwyBkupHost}`)).toString().slice(0, -1);
+        const ipfsUrl = urlParams.get('ipfs');
+        const ipfsApiPvdrBkup = (ipfsUrl === null) ? null : ipfsOptionsURL(ipfsUrl);
+        if (ipfsApiPvdrBkup !== null) {
+          EmbarkJS.Storage.setProvider('ipfs', ipfsApiPvdrBkup);
+          const result = await EmbarkJS.Storage.isAvailable();
+          if (!result) throw new Error('Backup storage not available.');
+          console.log('Backup Storage OK');
+          EmbarkJS.Storage.setProvider('ipfs', ipfsApiProvider);
+        }
         const contractAddr = urlParams.get('contract');
         if (web3.utils.isAddress(contractAddr)) {
           curContract = new EmbarkJS.Blockchain.Contract({
@@ -111,15 +113,24 @@ window.addEventListener('load', async () => {
             const inputimageurl = $('#div_mint #input_image_url');
             if (inputimageurl.prop('files').length > 0) {
               const hash = await EmbarkJS.Storage.uploadFile(inputimageurl);
-              await pinIpfs(ipfsApiGateway, hash); await pinIpfs(ipfsApiGtwyBkup, hash);
+              if (ipfsApiPvdrBkup !== null) {
+                EmbarkJS.Storage.setProvider('ipfs', ipfsApiPvdrBkup);
+                await EmbarkJS.Storage.uploadFile(inputimageurl);
+                EmbarkJS.Storage.setProvider('ipfs', ipfsApiProvider);
+              }
               json['image_url'] = ipfsLiveGateway + '/ipfs/' + hash;
             }
             const inputname = $('#div_mint #input_name').val(); if (inputname !== '') json['name'] = inputname;
             const inputdescription = $('#div_mint #input_description').val(); if (inputdescription !== '') json['description'] = inputdescription;
             const inputbackgroundcolor = $('#div_mint #input_background_color').val(); if (inputbackgroundcolor !== '') json['background_color'] = inputbackgroundcolor;
             const inputtraits = JSON.parse('[' + $('#div_mint #input_traits').val() + ']'); if (inputtraits.length > 0) json['traits'] = inputtraits;
-            const hash = await EmbarkJS.Storage.saveText(JSON.stringify(json));
-            await pinIpfs(ipfsApiGateway, hash); await pinIpfs(ipfsApiGtwyBkup, hash);
+            json = JSON.stringify(json);
+            const hash = await EmbarkJS.Storage.saveText(json);
+            if (ipfsApiPvdrBkup !== null) {
+              EmbarkJS.Storage.setProvider('ipfs', ipfsApiPvdrBkup);
+              await EmbarkJS.Storage.saveText(json);
+              EmbarkJS.Storage.setProvider('ipfs', ipfsApiProvider);
+            }
             const uri = ipfsLiveGateway + '/ipfs/' + hash;
             const receipt = await curContract.methods.mintWithTokenURI(owner, uri).send();
             const id = receipt.events['Transfer'].returnValues.tokenId;
