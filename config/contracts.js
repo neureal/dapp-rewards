@@ -37,7 +37,7 @@ module.exports = {
       '$WEB3' // uses pre existing web3 object if available (e.g in Mist)
     ],
     contracts: {
-      'Rewards': { args: [ 'XYZ Rewards', 'XYZR' ] }
+      'Rewards': { args: [ '10000', 'XYZ Rewards', 'XYZR' ] }
     },
     deployment: {
       host: 'localhost', // Host of the blockchain node

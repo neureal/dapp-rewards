@@ -70,7 +70,8 @@ window.addEventListener('load', async () => {
               $('#modal_progress').addClass('w3-show');
               const inputname = $('#div_deploy #input_name').val(); if (inputname.length > 32) throw new Error('Contract name too long.');
               const inputsymbol = $('#div_deploy #input_symbol').val(); if (inputsymbol.length > 8) throw new Error('Contract symbol too long.');
-              curContract = await Rewards.deploy({ arguments: [inputname, inputsymbol], data: Rewards.options.data }).send();
+              const inputcap = web3.utils.toBN($('#div_deploy #input_cap').val()).toString();
+              curContract = await Rewards.deploy({ arguments: [inputcap, inputname, inputsymbol], data: Rewards.options.data }).send();
               window.location.search = 'contract=' + encodeURI(curContract.options.address);
             } catch (err) { error(err); }
             $('#modal_progress').removeClass('w3-show');
@@ -91,13 +92,12 @@ window.addEventListener('load', async () => {
         $('#div_info #text_address').text(curContract.options.address);
         $('#div_info #text_details').html(`<a href="${netInfo[netid].explorer}/address/${curContract.options.address}" target="_blank">View Contract Details</a>`);
         const accounts = await web3.eth.getAccounts();
-        if (accounts.length < 1) throw new Error('No accounts available.');
-        const divInfo = $('#div_info');
-        for (let i = 0; i < 3 && i < accounts.length; i++) {
-          const minter = await curContract.methods.isMinter(accounts[i]).call();
-          const item = `<p>Using ETH Wallet Account: ${accounts[i]}<br><span class="w3-text-grey">Minter Role? ${minter}</span></p>`;
-          divInfo.append(item);
-        }
+        if (accounts.length < 1) throw new Error('No Ethereum accounts available.');
+        const minter = await curContract.methods.isMinter(accounts[0]).call();
+        $('#div_info').append(`<p>Using ETH Wallet Account: ${accounts[0]} <span class="w3-text-grey">Minter Role? ${minter}</span></p>`);
+        const curId = await curContract.methods.tokenId().call();
+        const cap = await curContract.methods.maxSupply().call();
+        $('#div_info').append(`<p><b id="text_curid">${curId}</b> of <b>${cap}</b> minted</p>`);
 
         // Mint NFT
         $('#div_mint #button_execute').click(async function () {
@@ -126,6 +126,8 @@ window.addEventListener('load', async () => {
             const item = `<p id="d"><b>NFT</b> | <a href="${uri}" target="_blank">MetaData</a> | <a href="${netInfo[netid].opensea}/${curContract.options.address}/${id}" target="_blank">OpenSea</a>` +
             ` | <a href="${netInfo[netid].explorer}/token/${curContract.options.address}?a=${id}" target="_blank">History</a> | ID[${id}]</p>`;
             $('#div_mint #span_content').append(item);
+            const curId = await curContract.methods.tokenId().call();
+            $('#div_info #text_curid').text(curId);
           } catch (err) { error(err); }
           $('#modal_progress').removeClass('w3-show');
         });
