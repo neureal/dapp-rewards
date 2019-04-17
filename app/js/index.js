@@ -92,11 +92,11 @@ window.addEventListener('load', async () => {
         $('#div_info #text_symbol').text(symbol);
         $('#div_info #text_network').text(netInfo[netid].desc);
         $('#div_info #text_address').text(curContract.options.address);
-        $('#div_info #text_details').html(`<a href="${netInfo[netid].explorer}/address/${curContract.options.address}" target="_blank">View Contract Details</a>`);
+        $('#div_info #text_details').html(`&rarr; <a href="${netInfo[netid].explorer}/address/${curContract.options.address}" target="_blank">View&nbsp;Contract&nbsp;Details</a>`);
         const accounts = await web3.eth.getAccounts();
         if (accounts.length < 1) throw new Error('No Ethereum accounts available.');
         const minter = await curContract.methods.isMinter(accounts[0]).call();
-        $('#div_info').append(`<p>Using ETH Wallet Account: ${accounts[0]} <span class="w3-text-grey">Minter Role? ${minter}</span></p>`);
+        $('#div_info').append(`<p>Using ETH Wallet Account ${accounts[0]}<span class="w3-margin-left w3-text-grey">&rarr; Minter&nbsp;Role?&nbsp;${minter}</span></p>`);
         const curId = await curContract.methods.tokenId().call();
         const cap = await curContract.methods.maxSupply().call();
         $('#div_info').append(`<p><b id="text_curid">${curId}</b> of <b>${cap}</b> minted</p>`);
