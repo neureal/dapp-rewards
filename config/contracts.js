@@ -3,6 +3,7 @@ module.exports = {
   default: {
     // Automatically call `ethereum.enable` if true.
     dappAutoEnable: false,
+
     // order of connections the dapp should connect to
     dappConnection: [
       '$WEB3' // uses pre existing web3 object if available (e.g in Mist)
@@ -12,6 +13,7 @@ module.exports = {
       'SafeMath': { deploy: false },
       'Address': { deploy: false },
       'Roles': { deploy: false },
+      'Counters': { deploy: false },
 
       'ERC721Full': { deploy: false },
       'ERC721MetadataMintable': { deploy: false },
@@ -22,7 +24,7 @@ module.exports = {
     },
     versions: {
       'web3': '1.0.0-beta',
-      'solc': '0.5.0'
+      'solc': '0.5.2'
     }
   },
 
@@ -56,7 +58,9 @@ module.exports = {
       'Rewards': { deploy: false }
     },
     deployment: {
+      // host: 'ropsten.infura.io',
       host: 'rinkeby.infura.io',
+      // host: 'kovan.infura.io',
       port: false,
       protocol: 'https',
       type: 'rpc'

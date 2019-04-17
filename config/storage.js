@@ -4,7 +4,12 @@ module.exports = {
     enabled: true,
     available_providers: ['ipfs'],
     ipfs_bin: 'ipfs',
-    provider: 'ipfs',
+    upload: {
+      provider: 'ipfs',
+      host: 'localhost',
+      port: 5001,
+      getUrl: 'http://localhost:8080/ipfs/'
+    },
     versions: {
       'ipfs-api': '18.2.0'
     }

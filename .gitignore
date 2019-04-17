@@ -1,5 +1,6 @@
 # Embark
 .embark/
+embarkArtifacts/
 node_modules/
 dist/
 config/production/password

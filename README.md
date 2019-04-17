@@ -14,7 +14,7 @@ https://cloudflare-ipfs.com/ipfs/QmcMuQQqhL92p8YajC2NDEmcrApVJaCtsYWqnbmaVxistE/
 ## Development Requirements
 
 https://embark.status.im/docs/installation.html
-- install the latest, ie `npm -g install embark@next`
+- install the latest, ie `npm -g install embark@4.0.1`
 - make sure to install local Geth and IPFS
 
 `npm install`
@@ -34,8 +34,9 @@ Run on Rinkeby with local webserver
 `embark run testnet`
 
 Deploy to public testnet (Rinkeby + IPFS)
-- must be running `ipfs daemon` in seperate console
+
 - `embark upload testnet`
+- must be running `ipfs daemon` in seperate console
 - `ipfs pin add -r <your-site-ipfs-hash>/`
 - access at `https://cloudflare-ipfs.com/ipfs/<your-site-ipfs-hash>`
 
