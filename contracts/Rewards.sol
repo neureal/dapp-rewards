@@ -26,7 +26,7 @@ contract Rewards is ERC721Full, ERC721MetadataMintable {
 
     function mintWithTokenURI(address to, string calldata tokenURI) external {
         require(_tokenId < _maxSupply); // Contract is finished, everything is minted
-        _tokenId = _tokenId.add(1);
         require(mintWithTokenURI(to, _tokenId, tokenURI), "");
+        _tokenId = _tokenId.add(1);
     }
 }
