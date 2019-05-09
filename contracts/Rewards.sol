@@ -2,19 +2,20 @@ pragma solidity 0.5.2;
 
 import "openzeppelin-solidity/contracts/token/ERC721/ERC721Full.sol";
 import "openzeppelin-solidity/contracts/token/ERC721/ERC721MetadataMintable.sol";
+import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
 /**
  * @title Rewards
  * Rewards - Serverless brandable dapp for minting ERC721 NFT rewards
  * @dev 
  */
-contract Rewards is ERC721Full, ERC721MetadataMintable {
+contract Rewards is ERC721Full, ERC721MetadataMintable, Ownable {
     using SafeMath for uint256;
 
     /*** State Variables ***/
     uint256 private _tokenId = 0; // Unique ID of an NFT
     function tokenId() external view returns (uint256) { return _tokenId; }
-    uint256 private _maxSupply = 0; // Maimum possible number of tokens that can be minted
+    uint256 private _maxSupply = 0; // Maximum possible number of tokens that can be minted
     function maxSupply() external view returns (uint256) { return _maxSupply; }
     
     /*** Events ***/
